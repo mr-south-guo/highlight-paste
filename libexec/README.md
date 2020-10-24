@@ -2,19 +2,22 @@
 
 This directory contains external programs required by this app.
 
-## source-highlight
+## highlight (by André Simon)
 
-This is a Windows port from ""GNU source-highlight", a program convert plain-text source code to syntax-highlighted source code in various file format, including HTML.
+"Highlight converts source code to formatted text with syntax highlighting."
+
+Office website: <https://gitlab.com/saalen/highlight>
 
 ### Download pre-built Windows binaries
 
-- The latest version (v3.1.8+) can be downloaded from [ezwinports](https://sourceforge.net/projects/ezwinports/files/): `source-highlight-*-w32-bin.zip` (This version is bigger and supports many languages.)
-
-- As an alternative, a lighter version (v2.1.2) can be downloaded from [Src-Highlite for Windows](http://gnuwin32.sourceforge.net/packages/src-highlite.htm): `src-highlite-*-bin.zip` (This version is smaller but supports fewer languages.)
+- The latest version (v3.58+) can be downloaded from [here](http://www.andre-simon.de/): `highlight-*.zip`
 
 ### Extraction
 
-- Extract the downloaded zip file here and make sure following directories exist:
-  `libexec\source-highlight\bin\`
-  `libexec\source-highlight\share\source-highlight\`
-- Other directories from the zip file are not needed and can be deleted.
+- Extract the downloaded zip file here and make sure the following directories exist:
+  `libexec\highlight\`
+- The following files/directories are not needed by this app. They can be removed to reduce disk usage. All paths are relative to `libexec\highlight\`.
+	- `highlight-gui.exe` : GUI for highlight
+	- `src\` : source code for highlight
+	- `extras\` : some extra stuff to use highlight with other programs
+	- `gui_files\` : file used by GUI for highlight

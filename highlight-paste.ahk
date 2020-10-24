@@ -10,8 +10,8 @@ SetWorkingDir %A_ScriptDir%
  */
 
 ; languages options for syntax-highlighting.
-; Use `source-highlight --lang-list` to see all supported language.
-LANG_OPTIONS := "bat|bash|cpp|html|java|js|json|latex|python"
+; Use `highlight --list-scripts=lang` to see all supported language.
+LANG_OPTIONS := "ahk|bat|bash|cpp|html|java|js|json|latex|python|vhdl"
 
 ; Default language
 CodeLang := "cpp"
@@ -19,15 +19,16 @@ CodeLang := "cpp"
 ; Show line number prefix: 0=no, 1=yes
 LineNumber := 0
 
-; Additional options for `source-highlight`
-; --doc: standalone html
-; --tab: number of spaces for tab
-HIGHLIGHT_OPTS := "--doc --tab=4"
+; Additional options for `highlight`
+; --inline-css : inline all formats (otherwise, highlighting won't show up after paste.)
+; --tab : convert tabs to given number of spaces.
+; --font : font for source code.
+HIGHLIGHT_OPTS := "--inline-css --tab=4 --font='Consolas' --style=edit-eclipse"
 
 ; Files and directory
-HIGHLIGHT_HOME := A_ScriptDir . "\libexec\source-highlight"
-HIGHLIGHT_BIN := HIGHLIGHT_HOME . "\bin\source-highlight.exe"
-HIGHLIGHT_DATA_DIR := HIGHLIGHT_HOME . "\share\source-highlight"
+HIGHLIGHT_HOME := A_ScriptDir . "\libexec\highlight"
+HIGHLIGHT_BIN := HIGHLIGHT_HOME . "\highlight.exe"
+HIGHLIGHT_DATA_DIR := HIGHLIGHT_HOME
 PLAIN_CODE_PATH := A_Temp . "\highlight-paste.plain-code.txt"
 COLOR_CODE_PATH := A_Temp . "\highlight-paste.color-code.html"
 
@@ -107,17 +108,17 @@ pasteHighlight()
 /**
  * Paste an HTML file as HTML formatted data (instead of plain HTML code).
  */
-pasteHTML(html_file)
+pasteHTML(file)
 {
-	if not FileExist(html_file)
+	if not FileExist(file)
 		return
 
-	; Patch the HTML for proper rendering in WPS. (Not tested in MS-Word.)
-	; [TECH DETAILS] Inside <pre></pre>, WPS does not render line-break if the 
-	; next line does not start with a white-space. Here we wrap each line with 
-	; <pre></pre> to fix that.
+	; Patch the HTML for proper rendering.
+	; [TECH DETAILS] Line-breaks inside <pre></pre> are handled poorly by many 
+	; word processors, such as WPS Office and docs.qq.com. Here changes all
+	; line-breaks inside <pre></pre> to <br>.
 	html := ""
-	Loop, read, %html_file%
+	Loop, read, %file%
 	{
 		; Only patch inside <pre></pre>.
 		if InStr(A_LoopReadLine, "<pre")
@@ -126,13 +127,13 @@ pasteHTML(html_file)
 			is_inside_pre := 0
 
 		; If blank line, add line-break to make sure it renders.
-		if (StrLen(A_LoopReadLine) == 0)
-			html .= "`r`n"
-		else
+		;if (StrLen(A_LoopReadLine) == 0)
+			;html .= "<br>"
+		;else
 			html .= A_LoopReadLine
 
 		if (is_inside_pre)
-			html .= "</pre>`r`n<pre>"
+			html .= "<br>"
 		else
 			html .= "`r`n"
 	}
