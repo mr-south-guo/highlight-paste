@@ -23,7 +23,7 @@ LineNumber := 0
 ; --inline-css : inline all formats (otherwise, highlighting won't show up after paste.)
 ; --tab : convert tabs to given number of spaces.
 ; --font : font for source code.
-HIGHLIGHT_OPTS := "--inline-css --tab=4 --font='Consolas' --style=edit-eclipse"
+HIGHLIGHT_OPTS := "--inline-css --tab=4 --font='Consolas' --style=github"
 
 ; Files and directory
 HIGHLIGHT_HOME := A_ScriptDir . "\libexec\highlight"
@@ -126,11 +126,7 @@ pasteHTML(file)
 		else if InStr(A_LoopReadLine, "</pre>")
 			is_inside_pre := 0
 
-		; If blank line, add line-break to make sure it renders.
-		;if (StrLen(A_LoopReadLine) == 0)
-			;html .= "<br>"
-		;else
-			html .= A_LoopReadLine
+		html .= A_LoopReadLine
 
 		if (is_inside_pre)
 			html .= "<br>"
