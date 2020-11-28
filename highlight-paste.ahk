@@ -20,10 +20,10 @@ CodeLang := "ahk"
 LineNumber := 0
 
 ; Additional options for `highlight`
-; --inline-css : inline all formats (otherwise, highlighting won't show up after paste.)
-; --tab : convert tabs to given number of spaces.
 ; --font : font for source code.
-HighlightOpts := "--inline-css --tab=4 --font='Consolas' --style=github"
+; --tab : convert tabs to given number of spaces.
+; --style : color theme (see directory "libexec/highlight/themes/")
+HighlightOpts := "--font='Consolas' --tab=4 --style=github"
 
 ; Files and directory
 HIGHLIGHT_HOME := A_ScriptDir . "\libexec\highlight"
@@ -37,18 +37,23 @@ COLOR_CODE_PATH := A_Temp . "\highlight-paste.color-code.html"
  */
 
 ; Settings tray menu
-Menu, Tray, Add
-Menu, HighlightPasteMenu, Add, Settings, HighlightPasteSettingsShow
-Menu, Tray, Add, Highlight-Paste, :HighlightPasteMenu
+Menu, Tray, NoStandard
+Menu, Tray, Add, Settings, HighlightPasteSettingsShow
+Menu, Tray, Add, Exit, HighlightPasteExit
+Menu, Tray, Default, Settings
 
 ; Settings window
 Gui, HighlightPasteSettings:Add, ListBox, r10 vCodeLang, %LANG_OPTIONS%
-Gui, HighlightPasteSettings:Add, CheckBox, vLineNumber, Line number
+Gui, HighlightPasteSettings:Add, CheckBox, x+m vLineNumber, Line number
 Gui, HighlightPasteSettings:Add, Link, gHighlightOptsHelp, <a>highlight options</a>:
-Gui, HighlightPasteSettings:Add, Edit, vHighlightOpts w120, %HighlightOpts%
-Gui, HighlightPasteSettings:Add, Button, Default w120, &OK
+Gui, HighlightPasteSettings:Add, Edit, vHighlightOpts w150 r4, %HighlightOpts%
+Gui, HighlightPasteSettings:Add, Button, Default w150, &OK
 GuiControl, HighlightPasteSettings:ChooseString, CodeLang, %CodeLang%
 
+return
+
+HighlightPasteExit:
+ExitApp
 return
 
 HighlightOptsHelp:
@@ -56,7 +61,7 @@ Run, %ComSpec% /k "%HIGHLIGHT_BIN% --help", %HIGHLIGHT_HOME%
 return
 
 HighlightPasteSettingsShow:
-Gui, HighlightPasteSettings:Show, , Settings
+Gui, HighlightPasteSettings:Show, w300 , highlight-paste | settings
 return
 
 HighlightPasteSettingsButtonOK:
@@ -101,7 +106,8 @@ pasteHighlight()
 	else
 		this_opts := HighlightOpts
 	
-	RunWait, "%HIGHLIGHT_BIN%" --data-dir="%HIGHLIGHT_DATA_DIR%" --input="%PLAIN_CODE_PATH%" --output="%COLOR_CODE_PATH%" --src-lang=%CodeLang% %this_opts%
+	; --inline-css : inline all formats (otherwise, highlighting won't show up after paste.)
+	RunWait, "%HIGHLIGHT_BIN%" --data-dir="%HIGHLIGHT_DATA_DIR%" --input="%PLAIN_CODE_PATH%" --output="%COLOR_CODE_PATH%" --inline-css --src-lang=%CodeLang% %this_opts%
 	if (ErrorLevel > 0)
 	{
     	MsgBox, ErrorLevel: %ErrorLevel% : "%HIGHLIGHT_BIN%" 
@@ -122,7 +128,7 @@ pasteHTML(file)
 	; Patch the HTML for proper rendering.
 	; [TECH DETAILS] Line-breaks inside <pre></pre> are handled poorly by many 
 	; word processors, such as WPS Office and docs.qq.com. Here changes all
-	; line-breaks inside <pre></pre> to <br>.
+	; line-breaks inside <pre></pre> to <br/>.
 	html := ""
 	Loop, read, %file%
 	{
@@ -135,7 +141,7 @@ pasteHTML(file)
 		html .= A_LoopReadLine
 
 		if (is_inside_pre)
-			html .= "<br>"
+			html .= "<br/>"
 		else
 			html .= "`r`n"
 	}
