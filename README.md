@@ -68,13 +68,15 @@ Each program may handle pasting HTML data differently. Here is a list of target 
 
 ### Why do you create this while some code editors, such as VSCode, can already do similar thing?
 
-**Story version**: I frequently work with many editors, and I want a solution not relying on certain feature of a certain editor.
+**Short version**:
+
+I frequently work with many editors, and I want a solution not relying on certain feature of a certain editor.
 
 **Long version**:
 
 1. While VSCode and some other editors, such as Notepad++, provide "copy as HTML or RTF" feature, but many other great editors do not (yet). Yes, I can use VSCode or Notepad++ as bridges (which I did for a long time), but I'm tired of it and **it really ought to be as simple as pressing one hotkey**.
 2. In VSCode etc., you can not easily control what the code looks. For example, I like to work with black background in VSCode, but I don't want to paste my code into my document in black background. And sometimes I also want some extra pretty options such as line numbers, which is not possible yet.
-3. Even with editors that supports "copy as HTML or RTF", they have different ways of syntax-highlighting. Using a standalone syntax-highlighting tool, allows me to get an unified look no matter where I copied the source code from.
+3. Even with editors that supports "copy as HTML/RTF", they have different ways of syntax-highlighting. Using a standalone syntax-highlighting tool, allows me to get an unified look no matter where I copied the source code from.
 
 ### Why don't you test on Microsoft Office (offline)?
 
