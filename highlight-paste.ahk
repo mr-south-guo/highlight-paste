@@ -5,6 +5,9 @@ SetWorkingDir %A_ScriptDir%
 #Include <WinClipAPI>
 #Include <WinClip>
 
+__author__ := "Guo, Jiangling"
+__version__ := "20201128.2000"
+
 /**
  * Option defaults
  */
@@ -39,6 +42,7 @@ COLOR_CODE_PATH := A_Temp . "\highlight-paste.color-code.html"
 ; Settings tray menu
 Menu, Tray, NoStandard
 Menu, Tray, Add, Settings, HighlightPasteSettingsShow
+Menu, Tray, Add, About/Help, HighlightPasteAboutShow
 Menu, Tray, Add, Exit, HighlightPasteExit
 Menu, Tray, Default, Settings
 
@@ -50,6 +54,14 @@ Gui, HighlightPasteSettings:Add, Edit, vHighlightOpts w150 r4, %HighlightOpts%
 Gui, HighlightPasteSettings:Add, Button, Default w150, &OK
 GuiControl, HighlightPasteSettings:ChooseString, CodeLang, %CodeLang%
 
+; About window
+Gui, HighlightPasteAbout:Font, s16 bold cBlue, Consolas
+Gui, HighlightPasteAbout:Add, Text, w480, highlight-paste
+Gui, HighlightPasteAbout:Font, s11 norm cBlack
+Gui, HighlightPasteAbout:Add, Text, wp+0 , An AutoHotkey app to one-key-paste plain-text source code with syntax-highlighting.
+Gui, HighlightPasteAbout:Add, Text, wp+0 , - Copy source code to clipboard.`n- Press Alt+v to paste into a target program.
+Gui, HighlightPasteAbout:Font, s8 norm cBlack
+Gui, HighlightPasteAbout:Add, Text, wp+0 , author: %__author__%`nver: %__version__%
 return
 
 HighlightPasteExit:
@@ -67,6 +79,10 @@ return
 HighlightPasteSettingsButtonOK:
 HighlightPasteSettingsGuiClose:
 Gui, HighlightPasteSettings:Submit
+return
+
+HighlightPasteAboutShow:
+Gui, HighlightPasteAbout:Show, w500 , highlight-paste | about
 return
 
 /**
