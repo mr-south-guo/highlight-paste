@@ -14,7 +14,7 @@ SetWorkingDir %A_ScriptDir%
 LANG_OPTIONS := "ahk|bat|bash|cpp|html|java|js|json|latex|python|vhdl"
 
 ; Default language
-CodeLang := "cpp"
+CodeLang := "ahk"
 
 ; Show line number prefix: 0=no, 1=yes
 LineNumber := 0
@@ -23,7 +23,7 @@ LineNumber := 0
 ; --inline-css : inline all formats (otherwise, highlighting won't show up after paste.)
 ; --tab : convert tabs to given number of spaces.
 ; --font : font for source code.
-HIGHLIGHT_OPTS := "--inline-css --tab=4 --font='Consolas' --style=github"
+HighlightOpts := "--inline-css --tab=4 --font='Consolas' --style=github"
 
 ; Files and directory
 HIGHLIGHT_HOME := A_ScriptDir . "\libexec\highlight"
@@ -44,9 +44,15 @@ Menu, Tray, Add, Highlight-Paste, :HighlightPasteMenu
 ; Settings window
 Gui, HighlightPasteSettings:Add, ListBox, r10 vCodeLang, %LANG_OPTIONS%
 Gui, HighlightPasteSettings:Add, CheckBox, vLineNumber, Line number
+Gui, HighlightPasteSettings:Add, Link, gHighlightOptsHelp, <a>highlight options</a>:
+Gui, HighlightPasteSettings:Add, Edit, vHighlightOpts w120, %HighlightOpts%
 Gui, HighlightPasteSettings:Add, Button, Default w120, &OK
 GuiControl, HighlightPasteSettings:ChooseString, CodeLang, %CodeLang%
 
+return
+
+HighlightOptsHelp:
+Run, %ComSpec% /k "%HIGHLIGHT_BIN% --help", %HIGHLIGHT_HOME%
 return
 
 HighlightPasteSettingsShow:
@@ -81,8 +87,8 @@ return
  */
 pasteHighlight()
 {
-	global CodeLang, LineNumber
-	global HIGHLIGHT_BIN, HIGHLIGHT_DATA_DIR, PLAIN_CODE_PATH, COLOR_CODE_PATH, HIGHLIGHT_OPTS
+	global CodeLang, LineNumber, HighlightOpts
+	global HIGHLIGHT_BIN, HIGHLIGHT_DATA_DIR, PLAIN_CODE_PATH, COLOR_CODE_PATH
 	
 	plain_code := Clipboard
 	
@@ -91,9 +97,9 @@ pasteHighlight()
 	FileAppend, %plain_code%, %PLAIN_CODE_PATH%
 	
 	if (LineNumber)
-		this_opts := HIGHLIGHT_OPTS . " --line-number"
+		this_opts := HighlightOpts . " --line-number"
 	else
-		this_opts := HIGHLIGHT_OPTS
+		this_opts := HighlightOpts
 	
 	RunWait, "%HIGHLIGHT_BIN%" --data-dir="%HIGHLIGHT_DATA_DIR%" --input="%PLAIN_CODE_PATH%" --output="%COLOR_CODE_PATH%" --src-lang=%CodeLang% %this_opts%
 	if (ErrorLevel > 0)
