@@ -5,8 +5,8 @@ SetWorkingDir %A_ScriptDir%
 #Include <WinClipAPI>
 #Include <WinClip>
 
-__author__ := "Guo, Jiangling"
-__version__ := "20201128.2000"
+__author__ := "mr-south-guo at github.com"
+__version__ := "20201130.1458"
 
 /**
  * Option defaults
