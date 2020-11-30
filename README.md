@@ -4,6 +4,8 @@
 
 An AutoHotkey app to one-key-paste plain-text source code with syntax-highlighting.
 
+![alt](assets/usage-demo.gif)
+
 ## Features
 
 - **One hotkey (`Alt+v`) with minimum configuration**
